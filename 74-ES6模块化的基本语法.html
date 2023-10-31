@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.js"></script>
+    <!-- 1.已安装vue-router -->
+    <script src="https://unpkg.com/vue-router@3"></script>
+    <title>ES6模块化基本语法</title>
+</head>
+
+<body>
+    <!--ES6模块化基本语法：
+        1.默认导出 与 默认导入
+        默认导出语法---export default{默认导出的成员}
+        语法规范：//当前文件模块为 74-model1.js
+        //定义私有成员 a 和 c
+        let a = 10;
+        let c = 30;
+        //外界访问不到变量b，因为他没被暴露出去,下面都没有写
+        let b = 20;
+        function show(){}
+        //要是没有向外export的话，后面的导入会输出一个空对象
+        //将本模块中的私有成员暴露出去。让其他模块也可以使用
+        export default {a, c, show}
+        //每一次的暴露（export default)都只能暴露一次一个文件，不然会报错
+
+
+        默认导入语法（要在js文件才行,对应74-import1.js文件）---import接收名称from'模块标识符'
+        语法规范：
+        //导入模块成员
+        import model1 from '74-model1.js'
+
+        console.log(model1)
+        //打印输出结果为： {a:10, c:30, show:[function:show]}
+    -->
+    <!-- 
+        按需导出语法：export let s1 = 10
+        语法规范：//当前文件模块 74-model2.js
+        //向外按需导出变量s1
+        export let s1 = 'aaa',
+        //向往按需导出变量s2
+        export let s2 = 'bbb',
+        //向外按需导出方法say
+        export function say = function(){}
+        //每一个模块可以有多次按需导出，但是只能有一次默认导出
+
+
+        按需导入语法：import {s1} from '模块标识符'
+        //导入模块成员
+        import {s1, s2, say} from 74-model2.js
+        console.log(s1)
+        console.log(s2)
+        console.log(say)
+     -->
+     <!-- 如果一个文件里面可以既有默认导出，就有按需导出，但是在导入文件里面，不加花括号只会输出默认导入，要想按需导入就要加花括号 -->
+
+
+     <!-- 直接导入并执行代码 ：有时候，只想单纯 执行 某个模块中的代码，并不需要得到模块中向外暴露的成员，此时，可以直接 导入 并执行模块代码
+        语法规范：//此文件模块为m2.js
+        //在当前模块中执行一个for循环
+        for(let i = 0; i <3; i++){
+            console.log(i)
+        } 
+        //直接导入并执行模块代码
+        import './m2.js'
+
+    -->
+
+    <div id="app">
+       
+    </div>
+
+    <script type="text/javascript">
+       
+
+        var vm = new Vue({
+            el: '#app',
+           
+
+        });
+
+
+    </script>
+</body>
+
+</html>

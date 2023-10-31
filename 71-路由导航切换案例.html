@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.js"></script>
+    <!-- 1.已安装vue-router -->
+    <script src="https://unpkg.com/vue-router@3"></script>
+    <title>路由导航切换案例</title>
+    <style>
+        a{
+            text-decoration: none;
+            color: black;
+            font-size: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-left: 10px;
+            width: 300px;
+        }
+        thead{
+            background-color: azure;
+        }
+        tbody,tr ,th ,td {
+            height: 29px;
+            text-align: center;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 路由导航切换案例，需求：点击不同的导航切换对应的子路由组件    -->
+    <!-- 首先明确步骤：1.引入路由文件 2.创建router-link【里面写路由地址+名称】 3.var一个组件【里面有template组件】 4.显示router-view
+         5.声明路由规则 new VueRouter【至少里面有path,component，也可以有name属性，props属性】 6.在vm实例对象中添加router属性
+
+         添加子组件步骤：是将子组件的router-link【链接的地址就是写在父组件路由的下面一层】和router-view写在父组件的template里面，然后还是需要声明组件写子组件显示的内容
+         声明的路由规则是利用children属性写在父级的规律中，children属性里面也至少包括path,component
+    -->
+
+    <div id="app">
+        <router-link :to=" {name:'hot'} ">热点</router-link>
+        <router-link :to=" {name: 'education'} ">教育</router-link>
+        <router-link to="/sociaty">社会</router-link>
+        <router-link to="/music">音乐</router-link>
+        <router-link to="/PE">体育</router-link>
+
+
+        <router-view></router-view>
+    </div>
+    <script type="text/javascript">
+        var hot = {
+            template: `<div >热点信息</div>`,
+        };
+        var education = {
+            template: `
+            <div>
+                <h3>班级管理信息</h3>
+                <!-- 子路由-->
+                <router-link to="/education/curriculum">课程管理</router-link>
+                <router-link to="/education/Class">班级管理</router-link>
+                <router-link to="/education/homework">作业管理</router-link>
+
+
+                <router-view></router-view>
+            </div>
+            
+        `,
+        };
+        // 子路由组件
+        var curriculum = {
+            template: `<p>课程管理信息</p>`,
+        };
+        var Class = {
+            template: `
+            <div>
+               <p>班级管理信息</p>
+               <button @click="viewDetails">查看详情</button>
+               
+            </div>
+
+            `,
+            methods: {
+                viewDetails: function () {
+                    // 用编程的方式控制路由跳转,这个跳转的页面还是只能是这里面写的路径，不可以跳转到其他的没有写的路径
+                    this.$router.push('/students')
+                }
+            }
+        };
+        var homework = {
+            template: `<p>作业管理信息</p>`,
+        };
+
+        var students = {
+            props: ['uname', 'id'],
+            template: `
+            <table>
+                  <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>学号</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td>{{uname[0]}}</td>
+                        <td>{{id[0]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{uname[1]}}</td>
+                        <td>{{id[1]}}</td>
+                    </tr><tr>
+                        <td>{{uname[2]}}</td>
+                        <td>{{id[2]}}</td>
+                    </tr>
+                  </tbody>
+            </table>
+            `,
+        }
+
+        var sociaty = {
+            template: `<div >社会信息</div>`,
+        };
+        var music = {
+            template: `<div >音乐信息</div>`,
+        };
+        var PE = {
+            template: `<div >体育信息</div>`,
+        };
+
+        var router = new VueRouter({
+            routes: [
+                // 路由重定向：让页面一开就显示user组件
+                { path: '/', redirect: '/hot' },
+                {
+                    name: 'hot',
+                    path: '/hot',
+                    component: hot,
+
+                }, {
+                    name: 'education',
+                    path: '/education',
+                    component: education,
+                    children: [
+                        {
+                            path: '/education/curriculum',
+                            component: curriculum,
+                        },
+                        {
+                            path: '/education/Class',
+                            component: Class,
+                        },
+                        {
+                            path: '/education/homework',
+                            component: homework,
+                        },
+                    ]
+                }, {
+                    path: '/sociaty',
+                    component: sociaty,
+
+                }, {
+                    path: '/music',
+                    component: music
+                }, {
+                    path: '/PE',
+                    component: PE
+                }, {
+                    path: '/students',
+                    component: students,
+                    props: {
+                        uname: ['mike', 'animi', 'candy'],
+                        id: [205060040, 205060041, 205060042],
+                    }
+                }
+            ]
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            router,
+
+        });
+
+
+    </script>
+</body>
+
+</html>

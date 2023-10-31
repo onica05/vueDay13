@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.js"></script>
+    <!-- 1.已安装vue-router -->
+    <script src="https://unpkg.com/vue-router@3"></script>
+    <title>后台管理路由案例</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .header {
+            background-color: slategray;
+            width: 1200px;
+            height: 58px;
+            line-height: 58px;
+            font-size: 29px;
+            color: white;
+            text-align: center;
+        }
+
+        .main {
+            display: inline-block;
+            width: 1200px;
+
+        }
+
+        .left {
+            float: left;
+            width: 278px;
+            height: 554px;
+            background-color: slategray;
+
+        }
+
+        .left ul li{
+            height: 39px;
+            line-height: 39px;
+            font-size: 18px;
+            color: white;
+            background-color: darkgray;
+            text-align: center;
+            border-bottom: 1px solid white;
+        }
+
+        .right {
+            width: 922px;
+            text-align: center;
+            display: inline-block;
+
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-left: 10px;
+            width: 900px;
+        }
+        thead{
+            background-color: darkgray;
+
+        }
+        tbody,tr ,th ,td {
+            height: 36px;
+            text-align: center;
+            border: 1px solid black;
+        }
+        
+
+        .footer {
+            background-color: darkgray;
+            width: 1200px;
+            height: 38px;
+            line-height: 38px;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 后台管理路由案例
+        需求：左侧菜单栏，点击左侧菜单，右侧出现对应内容信息【列表；在列表里面点击详情又跳转到详情页面，同时也要带有用户的id（通过路由的形式）】
+        实现步骤：
+        1.抽离并渲染APP根组件---没有用到router-link也可以---大概是因为根组件的原因
+        2.将左侧菜单改造为路由链接
+        3.创建左侧菜单对应路由组件
+        4.在右侧主体区域添加路由占位符 ---意思是:路由占位符在哪里，这个路由组件就会显示在哪里？-答：是滴。想要显示在那个位置，就在哪里写router-view
+        5.添加路由规则
+        6.通过路由重定向 默认渲染用户组件页面
+        7.渲染用户列表数据--通过data()定义了用户列表【学号、姓名、年龄】，然后在用户的template中添加table，利用v-for循环填充数据--跟之前学的填充表格数据的办法一样
+        8.编程式导航跳转到用户详情页
+        9.实现后退功能
+    -->
+
+
+
+    <div id="app">
+        <router-view></router-view>
+    </div>
+
+    <script type="text/javascript">
+        // 做这一步的时候，没有要router-link
+        const App = {
+            template: `
+            <div>
+                <header class="header">传智后台管理系统</header>
+                    <div class="main">
+                        <div class="content left">
+                            <ul>
+                                <li><router-link to="/users">用户管理</router-link></li>
+                                <li><router-link to="/rights">权限管理</router-link></li>
+                                <li><router-link to="/goods">商品管理</router-link></li>
+                                <li><router-link to="/orders">订单管理</router-link></li>
+                                <li><router-link to="/setting">系统设置</router-link></li>
+                            </ul>
+                        </div>
+                        <div class="content right">
+                            <div class="main-content"><router-view></router-view></div>
+                        </div>
+                    </div>
+                <footer class="footer">版权信息©2023</footer>
+            </div>
+            `,
+        };
+        var Users={
+            data(){
+                return{
+                    userlist:[
+                        {id:205060040, name:'张三', age:10},
+                        {id:205060041, name:'李四', age:20},
+                        {id:205060042, name:'王五', age:30},
+
+                    ]
+                }
+            },
+            template:`<div>
+                <h3>用户管理区域</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>年龄</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in userlist" :key="item.id">
+                            <td>{{index +1 }}</td>
+                            <td>{{item.id}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.age}}</td>
+                            <td><a href="javascript:;" style="color:blue" @click="goDetail(item.id)">查看详情</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`,
+
+            methods: {
+                goDetail: function (id) {
+                    // 用编程的方式控制路由跳转,这个跳转的页面还是只能是这里面写的路径，不可以跳转到其他的没有写的路径
+                    this.$router.push('/userinfo/' + id)
+                    // console.log(id);
+                }
+            }
+        };
+        var UserInfo={
+            props:['id'],
+            template:`<div>
+                <h5>用户详情页---用户ID为{{id}}</h5>
+                <button @click="goBack()">后退</button>
+            </div>`,
+            methods: {
+                goBack: function (id) {
+                    // 用编程的方式控制路由跳转,后退1页
+                    this.$router.go(-1)
+                }
+            }
+        };
+        var Rights={
+            template:`<div>
+                <h3>权限管理区域</h3>
+            </div>`,
+        };
+        var Goods={
+            template:`<div>
+                <h3>商品管理区域</h3>
+            </div>`,
+        };
+        var Orders={
+            template:`<div>
+                <h3>订单管理区域</h3>
+            </div>`,
+        };
+        var Setting={
+            template:`<div>
+                <h3>设置区域</h3>
+            </div>`,
+        };
+
+        // 5.创建路由实例对象
+        var router = new VueRouter({
+            // routes 是所有的路由规则 数组    ->有几个路由链接，就有几个对象
+            routes: [
+                {path:'/', redirect:'/users'},
+                {
+                    path:'/', 
+                    component:App,
+                    children:[
+                        {path:'/users',component:Users},
+                        {path:'/userinfo/:id',component:UserInfo,props:true},
+                        {path:'/rights',component:Rights},
+                        {path:'/goods',component:Goods},
+                        {path:'/orders',component:Orders},
+                        {path:'/setting',component:Setting},
+
+                    ]
+                }
+            ]
+        })
+        var vm = new Vue({
+            el: '#app',
+            components:{
+                App,
+            },
+            router,
+
+
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>

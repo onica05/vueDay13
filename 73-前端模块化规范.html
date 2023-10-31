@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.js"></script>
+    <!-- 1.已安装vue-router -->
+    <script src="https://unpkg.com/vue-router@3"></script>
+    <title>模块化相关规范</title>
+</head>
+
+<body>
+    <!--模块化概述：就是把单独的一个功能封装到一个模块（文件）中，模块之间相互隔离，但是可以通过特定接口公开内部成员，也可以依赖别的模块
+        好处：方便代码的重用， 从而提升开发效率，并且方便后期的维护；
+        浏览器端模块规范--AMD\CMD；
+        服务器端模块规范：CommonJs(node的)-----模块分为 单文件模块 与 包。模块成员导出：model.exports 和 exports。模块成员导入：require('模块标识符')；
+        ES6模块化规范（大统一）：每个js文件都是一个独立的模块；模块成员导出（暴露）：export关键字；模块成员导入：import关键字；
+    -->
+    <!-- 由于node默认支持commonjs所以要是使用ES6的话，需要插件--babel协助【是语法转换工具】,在babel文件中-->
+
+    <div id="app">
+       
+    </div>
+
+    <script type="text/javascript">
+       
+
+        var vm = new Vue({
+            el: '#app',
+           
+
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.js"></script>
+    <!-- 1.已安装vue-router -->
+    <script src="https://unpkg.com/vue-router@3"></script>
+    <title>路由导航使用案例</title>
+    <style>
+        a {
+            text-decoration: none;
+            background-color: darkgrey;
+            color: white;
+            width: 140px;
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid black;
+            text-align: center;
+            display: block;
+        }
+        .active{
+            display: inline-block;
+            color: red;
+            position: absolute;
+            top:5px;
+            left:160px
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 路由导航使用案例，需求：点击不同的导航切换对应的路由组件    -->
+    <!-- 首先明确步骤：1.引入路由文件 2.创建router-link【里面写路由地址+名称】 3.var一个组件【里面有template组件】 4.显示router-view
+         5.声明路由规则 new VueRouter【至少里面有path,component，也可以有name属性，props属性】 6.在vm实例对象中添加router属性
+    -->
+
+    <div id="app">
+       <router-link to="/curriculum">课程管理</router-link>
+       <router-link to="/Class">班级管理</router-link>
+       <router-link to="/homework">作业管理</router-link>
+
+       <router-view></router-view>
+    </div>
+    <script type="text/javascript">
+       var curriculum = {
+        template:`<div class="active">课程管理信息</div>`,
+       };
+       var Class = {
+        template:`<div class="active">班级管理信息</div>`,
+       };var homework = {
+        template:`<div class="active">作业管理信息</div>`,
+       };
+       
+       var router = new VueRouter({
+        routes:[{
+            path:'/curriculum',
+            component:curriculum
+        },{
+            path:'/Class',
+            component:Class
+        },{
+            path:'/homework',
+            component:homework
+        }
+    ]
+       })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+           router,
+
+        });
+
+
+    </script>
+</body>
+
+</html>
